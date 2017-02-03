@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ArticleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="art_user">
+    <Key>
+      <PropertyRef Name="user_id" />
+    </Key>
+    <Property Name="user_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="firstname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="lastname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="gender" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="passwd" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="menus" Relationship="Self.FK__menu__user_id__35BCFE0A" FromRole="art_user" ToRole="menu" />
+    <NavigationProperty Name="pages" Relationship="Self.FK__page__user_id__1DE57479" FromRole="art_user" ToRole="page" />
+  </EntityType>
+  <EntityType Name="art_userrole">
+    <Key>
+      <PropertyRef Name="role_id" />
+    </Key>
+    <Property Name="role_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="role_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="category_id" />
+    </Key>
+    <Property Name="category_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="category_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="posts" Relationship="Self.FK__post__category_i__2D27B809" FromRole="category" ToRole="post" />
+  </EntityType>
+  <EntityType Name="menu">
+    <Key>
+      <PropertyRef Name="menu_id" />
+    </Key>
+    <Property Name="menu_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="menu_title" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="parent_id" Type="Int16" />
+    <Property Name="user_id" Type="Int16" Nullable="false" />
+    <Property Name="page_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="art_user" Relationship="Self.FK__menu__user_id__35BCFE0A" FromRole="menu" ToRole="art_user" />
+    <NavigationProperty Name="page" Relationship="Self.FK__menu__page_id__36B12243" FromRole="menu" ToRole="page" />
+    <NavigationProperty Name="menu1" Relationship="Self.FK__menu__parent_id__34C8D9D1" FromRole="menu" ToRole="menu1" />
+    <NavigationProperty Name="menu2" Relationship="Self.FK__menu__parent_id__34C8D9D1" FromRole="menu1" ToRole="menu" />
+  </EntityType>
+  <EntityType Name="page">
+    <Key>
+      <PropertyRef Name="page_id" />
+    </Key>
+    <Property Name="page_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="page_url" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="page_title" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="page_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="user_id" Type="Int16" Nullable="false" />
+    <Property Name="created_date" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="art_user" Relationship="Self.FK__page__user_id__1DE57479" FromRole="page" ToRole="art_user" />
+    <NavigationProperty Name="menus" Relationship="Self.FK__menu__page_id__36B12243" FromRole="page" ToRole="menu" />
+  </EntityType>
+  <EntityType Name="post">
+    <Key>
+      <PropertyRef Name="post_id" />
+    </Key>
+    <Property Name="post_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="post_title" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="post_text" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="post_image" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="post_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="author" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="category_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="category" Relationship="Self.FK__post__category_i__2D27B809" FromRole="post" ToRole="category" />
+  </EntityType>
+  <Association Name="FK__menu__user_id__35BCFE0A">
+    <End Role="art_user" Type="Self.art_user" Multiplicity="1" />
+    <End Role="menu" Type="Self.menu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="art_user">
+        <PropertyRef Name="user_id" />
+      </Principal>
+      <Dependent Role="menu">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__page__user_id__1DE57479">
+    <End Role="art_user" Type="Self.art_user" Multiplicity="1" />
+    <End Role="page" Type="Self.page" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="art_user">
+        <PropertyRef Name="user_id" />
+      </Principal>
+      <Dependent Role="page">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__post__category_i__2D27B809">
+    <End Role="category" Type="Self.category" Multiplicity="1" />
+    <End Role="post" Type="Self.post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="category_id" />
+      </Principal>
+      <Dependent Role="post">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__menu__page_id__36B12243">
+    <End Role="page" Type="Self.page" Multiplicity="1" />
+    <End Role="menu" Type="Self.menu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="page">
+        <PropertyRef Name="page_id" />
+      </Principal>
+      <Dependent Role="menu">
+        <PropertyRef Name="page_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__menu__parent_id__34C8D9D1">
+    <End Role="menu" Type="Self.menu" Multiplicity="0..1" />
+    <End Role="menu1" Type="Self.menu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="menu">
+        <PropertyRef Name="menu_id" />
+      </Principal>
+      <Dependent Role="menu1">
+        <PropertyRef Name="parent_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ArticleEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="art_user" EntityType="Self.art_user" />
+    <EntitySet Name="art_userrole" EntityType="Self.art_userrole" />
+    <EntitySet Name="categories" EntityType="Self.category" />
+    <EntitySet Name="menus" EntityType="Self.menu" />
+    <EntitySet Name="pages" EntityType="Self.page" />
+    <EntitySet Name="posts" EntityType="Self.post" />
+    <AssociationSet Name="FK__menu__user_id__35BCFE0A" Association="Self.FK__menu__user_id__35BCFE0A">
+      <End Role="art_user" EntitySet="art_user" />
+      <End Role="menu" EntitySet="menus" />
+    </AssociationSet>
+    <AssociationSet Name="FK__page__user_id__1DE57479" Association="Self.FK__page__user_id__1DE57479">
+      <End Role="art_user" EntitySet="art_user" />
+      <End Role="page" EntitySet="pages" />
+    </AssociationSet>
+    <AssociationSet Name="FK__post__category_i__2D27B809" Association="Self.FK__post__category_i__2D27B809">
+      <End Role="category" EntitySet="categories" />
+      <End Role="post" EntitySet="posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__menu__page_id__36B12243" Association="Self.FK__menu__page_id__36B12243">
+      <End Role="page" EntitySet="pages" />
+      <End Role="menu" EntitySet="menus" />
+    </AssociationSet>
+    <AssociationSet Name="FK__menu__parent_id__34C8D9D1" Association="Self.FK__menu__parent_id__34C8D9D1">
+      <End Role="menu" EntitySet="menus" />
+      <End Role="menu1" EntitySet="menus" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

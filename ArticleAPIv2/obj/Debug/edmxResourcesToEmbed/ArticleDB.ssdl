@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ArticleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="art_user">
+    <Key>
+      <PropertyRef Name="user_id" />
+    </Key>
+    <Property Name="user_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_name" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="firstname" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="lastname" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="gender" Type="nvarchar" MaxLength="1" Nullable="false" />
+    <Property Name="passwd" Type="nvarchar" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="art_userrole">
+    <Key>
+      <PropertyRef Name="role_id" />
+    </Key>
+    <Property Name="role_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="role_name" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="category_id" />
+    </Key>
+    <Property Name="category_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="category_name" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="menu">
+    <Key>
+      <PropertyRef Name="menu_id" />
+    </Key>
+    <Property Name="menu_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="menu_title" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="parent_id" Type="smallint" />
+    <Property Name="user_id" Type="smallint" Nullable="false" />
+    <Property Name="page_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="page">
+    <Key>
+      <PropertyRef Name="page_id" />
+    </Key>
+    <Property Name="page_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="page_url" Type="varchar" MaxLength="1" Nullable="false" />
+    <Property Name="page_title" Type="varchar" MaxLength="1" Nullable="false" />
+    <Property Name="page_content" Type="text" Nullable="false" />
+    <Property Name="user_id" Type="smallint" Nullable="false" />
+    <Property Name="created_date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="post">
+    <Key>
+      <PropertyRef Name="post_id" />
+    </Key>
+    <Property Name="post_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="post_title" Type="varchar" MaxLength="1" Nullable="false" />
+    <Property Name="post_text" Type="text" Nullable="false" />
+    <Property Name="post_image" Type="varchar" MaxLength="1" />
+    <Property Name="post_date" Type="date" Nullable="false" />
+    <Property Name="author" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="category_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__menu__page_id__36B12243">
+    <End Role="page" Type="Self.page" Multiplicity="1" />
+    <End Role="menu" Type="Self.menu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="page">
+        <PropertyRef Name="page_id" />
+      </Principal>
+      <Dependent Role="menu">
+        <PropertyRef Name="page_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__menu__parent_id__34C8D9D1">
+    <End Role="menu" Type="Self.menu" Multiplicity="0..1" />
+    <End Role="menu1" Type="Self.menu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="menu">
+        <PropertyRef Name="menu_id" />
+      </Principal>
+      <Dependent Role="menu1">
+        <PropertyRef Name="parent_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__menu__user_id__35BCFE0A">
+    <End Role="art_user" Type="Self.art_user" Multiplicity="1" />
+    <End Role="menu" Type="Self.menu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="art_user">
+        <PropertyRef Name="user_id" />
+      </Principal>
+      <Dependent Role="menu">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__page__user_id__1DE57479">
+    <End Role="art_user" Type="Self.art_user" Multiplicity="1" />
+    <End Role="page" Type="Self.page" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="art_user">
+        <PropertyRef Name="user_id" />
+      </Principal>
+      <Dependent Role="page">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__post__category_i__2D27B809">
+    <End Role="category" Type="Self.category" Multiplicity="1" />
+    <End Role="post" Type="Self.post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="category_id" />
+      </Principal>
+      <Dependent Role="post">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ArticleModelStoreContainer">
+    <EntitySet Name="art_user" EntityType="Self.art_user" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="art_userrole" EntityType="Self.art_userrole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="menu" EntityType="Self.menu" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="page" EntityType="Self.page" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="post" EntityType="Self.post" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__menu__page_id__36B12243" Association="Self.FK__menu__page_id__36B12243">
+      <End Role="page" EntitySet="page" />
+      <End Role="menu" EntitySet="menu" />
+    </AssociationSet>
+    <AssociationSet Name="FK__menu__parent_id__34C8D9D1" Association="Self.FK__menu__parent_id__34C8D9D1">
+      <End Role="menu" EntitySet="menu" />
+      <End Role="menu1" EntitySet="menu" />
+    </AssociationSet>
+    <AssociationSet Name="FK__menu__user_id__35BCFE0A" Association="Self.FK__menu__user_id__35BCFE0A">
+      <End Role="art_user" EntitySet="art_user" />
+      <End Role="menu" EntitySet="menu" />
+    </AssociationSet>
+    <AssociationSet Name="FK__page__user_id__1DE57479" Association="Self.FK__page__user_id__1DE57479">
+      <End Role="art_user" EntitySet="art_user" />
+      <End Role="page" EntitySet="page" />
+    </AssociationSet>
+    <AssociationSet Name="FK__post__category_i__2D27B809" Association="Self.FK__post__category_i__2D27B809">
+      <End Role="category" EntitySet="category" />
+      <End Role="post" EntitySet="post" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace ArticleAPIv2.Models
 {
     public class UserRoleModel
     {
-        public short roleId { get; set; }
-        public string roleName { get; set; }
-        public string descriptions { get; set; }
-     
+        [Key]
+        public short role_id { get; set; }
+        public string role_name { get; set; }
+        public string description { get; set; }
+
+  
     }
 }

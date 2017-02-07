@@ -26,7 +26,7 @@ namespace ArticleAPIv2
         }
     
         public virtual DbSet<art_user> art_user { get; set; }
-        public virtual DbSet<art_userrole> art_userrole { get; set; }
+        public virtual DbSet<art_userrole> art_userroles { get; set; }
         public virtual DbSet<category> categories { get; set; }
         public virtual DbSet<menu> menus { get; set; }
         public virtual DbSet<page> pages { get; set; }

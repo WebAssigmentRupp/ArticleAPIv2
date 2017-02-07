@@ -14,6 +14,7 @@ namespace ArticleAPIv2
     
     public partial class art_userrole
     {
+        
         public short role_id { get; set; }
         public string role_name { get; set; }
         public string description { get; set; }

@@ -14,16 +14,17 @@ namespace ArticleAPIv2.Controllers
         public IHttpActionResult GetAllStudents()
         {
             ICollection<UserRoleModel> userrole = null;
+         
 
             using (var dbContext = new ArticleEntities())
             {
 
-                userrole = dbContext.art_userrole.Include("art_userrole")
+                userrole = dbContext.art_userroles.Include("art_userrole")
                             .Select(user => new UserRoleModel()
                             {
-                                roleId = user.role_id,
-                                roleName = user.role_name,
-                                descriptions = user.description
+                                role_id = user.role_id,
+                                role_name = user.role_name,
+                                description = user.description
                             }).ToList<UserRoleModel>();
             }
 
@@ -40,15 +41,14 @@ namespace ArticleAPIv2.Controllers
             UserRoleModel userRoleModel = null;
             using (var dbContext = new ArticleEntities())
             {
-                userRoleModel = dbContext.art_userrole
+                userRoleModel = dbContext.art_userroles
                     .Where(s => s.role_id == id)
                     .Select(user => new UserRoleModel()
                 {
-                    roleId = user.role_id,
-                    roleName = user.role_name,
-                    descriptions = user.description
+                    role_id = user.role_id,
+                    role_name = user.role_name,
+                    description = user.description
                 }).FirstOrDefault<UserRoleModel>();
-
             }
             if (userRoleModel == null)
             {
@@ -66,8 +66,8 @@ namespace ArticleAPIv2.Controllers
             }
             using (var db = new ArticleEntities())
             {
-                var userRoleModel = db.art_userrole
-                    .Where(user => user.role_id == id)
+                var userRoleModel = db.art_userroles
+                    .Where(user => user.role_id ==id)
                     .FirstOrDefault();
                 db.Entry(userRoleModel).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
@@ -75,34 +75,28 @@ namespace ArticleAPIv2.Controllers
             return Ok("Deleted Success!!");
         }
 
-        public IHttpActionResult Post(UserRoleModel userRole)
+        public IHttpActionResult POST(UserRoleModel userRole)
         {
+            if (!ModelState.IsValid)
+               return BadRequest("Invalid data.");
 
-            if (!ModelState.IsValid) {
-                return BadRequest("Invalid data.");
-            }
-            using(var db=new ArticleEntities()){
-                db.art_userrole.Add(new art_userrole()
-                {
-                    role_name = userRole.roleName,
-                    description =userRole.descriptions
-                });
-                db.SaveChanges();
-            }
-
+           var user = new art_userrole() { role_name = userRole.role_name, description = userRole.description };
+           var db = new ArticleEntities();
+           db.art_userroles.Add(user);
+           db.SaveChanges();
             return Ok("Added Successed!");
         }
 
-        public IHttpActionResult Put(UserRoleModel userRole)
+        public IHttpActionResult Put([FromBody] UserRoleModel id)
         {
           
             using(var db=new ArticleEntities()){
-              var  userRoleModel = db.art_userrole
-                    .Where(user => user.role_id == userRole.roleId)
+                var userRoleModel = db.art_userroles
+                    .Where(user => user.role_id == id.role_id)
                     .FirstOrDefault<art_userrole>();
               if (userRoleModel != null) {
-                  userRoleModel.role_name = userRole.roleName;
-                  userRoleModel.description = userRole.descriptions;
+                  userRoleModel.role_name = id.role_name;
+                  userRoleModel.description = id.description;
                   db.SaveChanges();              
               }
              }
